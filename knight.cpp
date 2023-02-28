@@ -286,15 +286,6 @@ void event_13(knight &hero, int mush_type, string file_mush_ghost)
     getline(filein, line1);
     // Chuyển thông tin thành số
     int n = stoi(line1);
-    // Khởi tạo mảng chứa dãy số dòng 2
-    int arr[n];
-    // Nhận thông tin dòng 2 vào mảng thông qua string
-    string intStr;
-    for (int i = 0; i < n; i++)
-    {
-        getline(filein, intStr, ',');
-        arr[i] = stoi(intStr);
-    }
     // Reset các chỉ số trước khi ăn nấm
     if (hero.HP > hero.max_HP)
     {
@@ -305,24 +296,53 @@ void event_13(knight &hero, int mush_type, string file_mush_ghost)
     {
     case 1: // Nấm loại 1
     {
+        // Khởi tạo mảng chứa dãy số dòng 2
+        int arr[n];
+        // Nhận thông tin dòng 2 vào mảng thông qua string
+        string intStr;
+        for (int i = 0; i < n; i++)
+        {
+            getline(filein, intStr, ',');
+            arr[i] = stoi(intStr);
+        }
         int maxi = find_maxi(arr, n);
         int mini = find_mini(arr, n);
+        // cout << "Nam so 1, mau bi tru: " << maxi + mini << endl;
         hero.HP = hero.HP - (maxi + mini);
         break;
     }
     case 2: // Nấm loại 2
     {
+        // Khởi tạo mảng chứa dãy số dòng 2
+        int arr[n];
+        // Nhận thông tin dòng 2 vào mảng thông qua string
+        string intStr;
+        for (int i = 0; i < n; i++)
+        {
+            getline(filein, intStr, ',');
+            arr[i] = stoi(intStr);
+        }
         int mtx = 0, mti = 0;
         if (!isMountainArray(arr, n, mtx, mti))
         {
             mtx = -2;
             mti = -3;
         }
+        // cout << "Nam so 2, mau bi tru: " << mtx + mti << endl;
         hero.HP = hero.HP - (mtx + mti);
         break;
     }
     case 3: // Nấm loại 3
     {
+        // Khởi tạo mảng chứa dãy số dòng 2
+        int arr[n];
+        // Nhận thông tin dòng 2 vào mảng thông qua string
+        string intStr;
+        for (int i = 0; i < n; i++)
+        {
+            getline(filein, intStr, ',');
+            arr[i] = stoi(intStr);
+        }
         // Khởi tạo mảng mới chứa các số được biến đổi ở dòng 2
         int new_arr[n];
         for (int i = 0; i < n; i++)
@@ -330,19 +350,32 @@ void event_13(knight &hero, int mush_type, string file_mush_ghost)
             if (arr[i] < 0)
             {
                 new_arr[i] = -arr[i];
+                new_arr[i] = (17 * new_arr[i] + 9) % 257;
             }
             else
+            {
                 new_arr[i] = arr[i];
-            new_arr[i] = (17 * new_arr[i] + 9) % 257;
+                new_arr[i] = (17 * new_arr[i] + 9) % 257;
+            }
         }
         // Tìm maxi2, mini2 trong mảng mới
         int maxi2 = find_maxi2(new_arr, n);
         int mini2 = find_mini2(new_arr, n);
+        // cout << "Nam so 3, mau bi tru: " << maxi2 + mini2 << endl;
         hero.HP = hero.HP - (maxi2 + mini2);
         break;
     }
     case 4: // Nấm loại 4
     {
+        // Khởi tạo mảng chứa dãy số dòng 2
+        int arr[n];
+        // Nhận thông tin dòng 2 vào mảng thông qua string
+        string intStr;
+        for (int i = 0; i < n; i++)
+        {
+            getline(filein, intStr, ',');
+            arr[i] = stoi(intStr);
+        }
         // Khởi tạo mảng mới chứa các số được biến đổi ở dòng 2
         int new_arr[n];
         for (int i = 0; i < n; i++)
@@ -350,96 +383,101 @@ void event_13(knight &hero, int mush_type, string file_mush_ghost)
             if (arr[i] < 0)
             {
                 new_arr[i] = -arr[i];
+                new_arr[i] = (17 * new_arr[i] + 9) % 257;
             }
             else
+            {
                 new_arr[i] = arr[i];
-            new_arr[i] = (17 * new_arr[i] + 9) % 257;
+                new_arr[i] = (17 * new_arr[i] + 9) % 257;
+            }
         }
         // Tìm max2_3x, max2_3i
         int max2_3x, max2_3i;
         // Trường hợp không tồn tại số lớn thứ 2
-        if (n < 3 || (arr[0] == arr[1] && arr[1] == arr[2]))
+        if (n < 3 || (new_arr[0] == new_arr[1] && new_arr[1] == new_arr[2]))
         {
             max2_3x = -5;
             max2_3i = -7;
         }
         // Trường hợp tồn tại số lớn thứ 2
         // Trường hợp 3 số nhưng chỉ có 2 giá trị
-        if (arr[0] == arr[1])
+        if (new_arr[0] == new_arr[1])
         {
-            if (arr[2] > arr[1])
+            if (new_arr[2] > new_arr[1])
             {
-                max2_3x = arr[0];
+                max2_3x = new_arr[0];
                 max2_3i = 0;
             }
             else
             {
-                max2_3x = arr[2];
+                max2_3x = new_arr[2];
                 max2_3i = 2;
             }
         }
-        if (arr[1] == arr[2])
+        if (new_arr[1] == new_arr[2])
         {
-            if (arr[0] > arr[1])
+            if (new_arr[0] > new_arr[1])
             {
-                max2_3x = arr[1];
+                max2_3x = new_arr[1];
                 max2_3i = 1;
             }
             else
             {
-                max2_3x = arr[0];
+                max2_3x = new_arr[0];
                 max2_3i = 0;
             }
         }
-        if (arr[0] == arr[2])
+        if (new_arr[0] == new_arr[2])
         {
-            if (arr[1] > arr[0])
+            if (new_arr[1] > new_arr[0])
             {
-                max2_3x = arr[0];
+                max2_3x = new_arr[0];
                 max2_3i = 0;
             }
             else
             {
-                max2_3x = arr[1];
+                max2_3x = new_arr[1];
                 max2_3i = 1;
             }
         }
         // Trường hợp 3 giá trị khác nhau
-        if (arr[0] != arr[1] && arr[1] != arr[2] && arr[0] != arr[2])
+        if (new_arr[0] != new_arr[1] && new_arr[1] != new_arr[2] && new_arr[0] != new_arr[2])
         {
-            max2_3x = arr[0];
+            max2_3x = new_arr[0];
             max2_3i = 0;
-            if (max2_3x < arr[1])
+            if (max2_3x < new_arr[1])
             {
-                max2_3x = arr[1];
+                max2_3x = new_arr[1];
                 max2_3i = 1;
             }
-            if (max2_3x < arr[2])
+            if (max2_3x < new_arr[2])
             {
-                max2_3x = arr[2];
+                max2_3x = new_arr[2];
                 max2_3i = 2;
             }
-            int min_x = arr[0], min_i = 0;
-            if (min_x > arr[1])
+            int min_x = new_arr[0], min_i = 0;
+            if (min_x > new_arr[1])
             {
-                min_x = arr[1];
+                min_x = new_arr[1];
                 min_i = 1;
             }
-            if (min_x > arr[2])
+            if (min_x > new_arr[2])
             {
-                min_x = arr[2];
+                min_x = new_arr[2];
                 min_i = 2;
             }
             max2_3i = 3 - max2_3i - min_i;
-            max2_3x = arr[max2_3i];
+            max2_3x = new_arr[max2_3i];
         }
+        // cout << "Nam so 4, mau bi tru: " << max2_3i + max2_3x << endl;
         hero.HP = hero.HP - (max2_3x + max2_3i);
         break;
     }
     default:
         break;
     }
-    // Xóa bộ nhớ mảng động
+    // Đóng file
+    filein.close();
 }
 // Kiểm tra dãy số hình núi
 bool isMountainArray(int *arr, int n, int &mtx, int &mti)
@@ -504,7 +542,6 @@ bool isMountainArray(int *arr, int n, int &mtx, int &mti)
             count++;
             mtx = arr[i];
             mti = i;
-            cout << mti << endl;
         }
     }
     if (count > 1)
@@ -613,11 +650,12 @@ void event_19(knight &hero, string file_asclepius_pack)
         }
         count_in_line = 0;
     }
+    filein.close();
 }
 // Kiểm tra vua Arthur
 bool isArthur(knight &hero)
 {
-    if (hero.HP == MaxHP)
+    if (hero.max_HP == MaxHP)
         return true;
     else
         return false;
@@ -625,7 +663,7 @@ bool isArthur(knight &hero)
 // Kiểm tra Lancelot
 bool isLancelot(knight &hero)
 {
-    if (isPrime(hero.HP))
+    if (isPrime(hero.max_HP))
         return true;
     else
         return false;
@@ -643,10 +681,10 @@ void event_99(knight &hero)
     }
 }
 // Sự kiện số 18
-void event_18(knight &hero)
+void event_18(knight &hero, string file_merlin_pack)
 {
     // Mở file để đọc
-    ifstream file("tc1_merline_pack");
+    ifstream file(file_merlin_pack);
     // Đọc số nguyên n từ dòng đầu tiên
     int n;
     file >> n;
@@ -759,12 +797,6 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
     getline(filein, file_mush_ghost, ',');
     getline(filein, file_asclepius_pack, ',');
     getline(filein, file_merlin_pack, ',');
-    cout << line1 << endl
-         << line2 << endl
-         << "line31: " << file_mush_ghost << endl
-         << "line32: " << file_asclepius_pack << endl
-         << "line33: " << file_merlin_pack << endl
-         << "Chuong trinh bat dau" << endl;
     // Cập nhật thông tin cho hiệp sĩ
     int knightInt[5];
     convIntArr(line1, knightInt);
@@ -793,18 +825,13 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
     //  Khởi tạo vòng lặp để duyệt qua từng sự kiện của hiệp sĩ
     for (int i = 0; event[i] != -1; i++)
     {
-        // Trước khi thực hiện sự kiện phải kiểm tra hiệp sĩ còn sống không
-        if (lose(myHero))
-        {
-            myHero.rescue = 0;
-            break;
-        }
         // Duyệt từng sự kiện
         // Sự kiện 0
         if (event[i] == 0)
         {
             event_0(myHero);
             update(myHero, HP, level, remedy, maidenkiss, phoenixdown, rescue);
+            display(HP, level, remedy, maidenkiss, phoenixdown, rescue);
             break;
         }
         // Sự kiện từ 1 tới 5
@@ -814,6 +841,8 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
             if (lose(myHero))
             {
                 myHero.rescue = 0;
+                update(myHero, HP, level, remedy, maidenkiss, phoenixdown, rescue);
+                display(HP, level, remedy, maidenkiss, phoenixdown, rescue);
                 break;
             }
         }
@@ -891,7 +920,7 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
         // Sự kiện 18
         else if (event[i] == 18)
         {
-            event_18(myHero);
+            event_18(myHero, file_merlin_pack);
         }
         // Kiểm tra xem hết bị tí hon chưa
         if (i - checkevent_6_end == 3)
@@ -904,20 +933,15 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
         {
             myHero.level = prev_level;
         }
-        // Debug line
-        cout << "Sau index: " << i << " event: " << event[i] << " HP: " << myHero.HP << endl;
+        // // Debug line
+        // cout << "Sau index: " << i << " event: " << event[i] << " HP: " << myHero.HP << endl;
+        // In ra thông tin hiệp sĩ sau mỗi sự kiện
+        if (event[i + 1] == -1 && myHero.HP > 0)
+        {
+            myHero.rescue = 1;
+        }
+        update(myHero, HP, level, remedy, maidenkiss, phoenixdown, rescue);
+        display(HP, level, remedy, maidenkiss, phoenixdown, rescue);
     }
-    // Kiểm tra chết hay không
-    if (lose(myHero))
-    {
-        myHero.rescue = 0;
-    }
-    // Kiểm tra hiệp sĩ có thắng hay không
-    if (myHero.HP > 0)
-    {
-        myHero.rescue = 1;
-    }
-    // In ra thông tin của hiệp sĩ
-    update(myHero, HP, level, remedy, maidenkiss, phoenixdown, rescue);
-    display(HP, level, remedy, maidenkiss, phoenixdown, rescue);
+    filein.close();
 }

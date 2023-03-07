@@ -49,7 +49,7 @@ void event_15(knight &hero, int index, int event)
     {
         index++;
         int b = index % 10;
-        int levelO = index > 6 ? (b > 5 ? b : 5) : b; // index > 6 và b > 5 thì levelO = b index >6 và b <=5 thì level) = 5 còn lại thì levelO sẽ < 6
+        int levelO = index > 6 ? (b > 5 ? b : 5) : b; // index > 6 và b > 5 thì levelO = b , index >6 và b <=5 thì level) = 5 còn lại thì levelO sẽ < 6
         int damage = 0;
         if (hero.level > levelO)
         {
@@ -92,13 +92,6 @@ void event_15(knight &hero, int index, int event)
                 damage = baseDamage_Troll * levelO * 10;
                 hero.HP = hero.HP - damage;
             }
-        }
-    }
-    else
-    {
-        if (hero.level < 10)
-        {
-            hero.level++;
         }
     }
 }
@@ -165,7 +158,10 @@ void becomeTiny(knight &hero)
     if (hero.remdedy > 0)
     {
         hero.remdedy--;
-        hero.HP = hero.HP * 5;
+        if (hero.HP * 5 > hero.max_HP)
+            hero.HP = hero.max_HP;
+        else
+            hero.HP = hero.HP * 5;
     }
 }
 // Sự kiện số 7
@@ -925,7 +921,7 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
         // Kiểm tra xem hết bị tí hon chưa
         if (i - checkevent_6_end == 3)
         {
-            myHero.HP = myHero.HP * 5;
+            myHero.HP = (myHero.HP * 5 > myHero.max_HP) ? (myHero.max_HP) : (myHero.HP * 5);
             checkevent_6_end = 9999;
         }
         // Kiểm tra xem hết bị biến thành ếch chưa

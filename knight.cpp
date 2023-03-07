@@ -65,6 +65,7 @@ void event_15(knight &hero, int index, int event)
             // gặp gấu MadBear
             if (event == 1)
             {
+                // cout << "Call" << endl;
                 damage = baseDamage_MadBear * levelO * 10;
                 hero.HP = hero.HP - damage;
             }
@@ -122,9 +123,9 @@ void event_6(knight &hero, int index)
         index++;
         int b = index % 10;
         int levelO = index > 6 ? (b > 5 ? b : 5) : b;
+        // Thắng
         if (hero.level > levelO)
         {
-            // Thắng
             if (hero.level < 9)
             {
                 hero.level += 2;
@@ -134,9 +135,13 @@ void event_6(knight &hero, int index)
                 hero.level += 1;
             }
         }
+        // Thua
         else if (hero.level < levelO)
         {
-            becomeTiny(hero);
+            if (hero.remdedy < 1)
+                becomeTiny(hero);
+            else
+                hero.remdedy--;
         }
     }
     else

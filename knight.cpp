@@ -116,7 +116,7 @@ bool lose(knight &hero)
         return false;
 }
 // Sự kiện số 6
-void event_6(knight &hero, int index)
+void event_6(knight &hero, int index, bool &isTiny)
 {
     if (!isArthur(hero) && !isLancelot(hero))
     {
@@ -139,7 +139,10 @@ void event_6(knight &hero, int index)
         else if (hero.level < levelO)
         {
             if (hero.remdedy < 1)
-                becomeTiny(hero);
+            {
+                hero.HP = hero.HP < 5 ? 1 : (hero.HP / 5);
+                isTiny = true;
+            }
             else
                 hero.remdedy--;
         }
@@ -156,18 +159,17 @@ void event_6(knight &hero, int index)
         }
     }
 }
-// Biến thành tí hon
-void becomeTiny(knight &hero)
+// Check hết biến thành tí hon
+bool endTiny(knight &hero, int index, int check_event6_end, bool isTiny)
 {
-    hero.HP = hero.HP < 5 ? 1 : (hero.HP / 5);
-    if (hero.remdedy > 0)
+    if ((index - check_event6_end == 3 && isTiny))
+        return true;
+    else if (hero.remdedy > 0 && isTiny)
     {
         hero.remdedy--;
-        if (hero.HP * 5 > hero.max_HP)
-            hero.HP = hero.max_HP;
-        else
-            hero.HP = hero.HP * 5;
+        return true;
     }
+    return false;
 }
 // Sự kiện số 7
 void event_7(knight &hero, int index)
@@ -820,9 +822,11 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
     convIntArr(line2, event);
     // Cập nhật thông tin đầu vào cho hiệp sĩ
     update(myHero, HP, level, remedy, maidenkiss, phoenixdown, rescue);
-    int checkevent_6_end = 9999; // Biến này dùng để kiểm tra khi nào hiệp sĩ hết bị thu nhỏ
-    int prev_level;              // Biến này để lưu level trước khi bị biến thành ếch
-    int checkevent_7_end = 9999; // Biến này dùng để kiểm tra hiệp sĩ hết biến thành ếch hay chưa
+    int checkevent_6_end = -9999; // Biến này dùng để kiểm tra khi nào hiệp sĩ hết 3 vòng event 6
+    bool isTiny = false;
+    int prev_level;               // Biến này để lưu level trước khi bị biến thành ếch
+    int checkevent_7_end = -9999; // Biến này dùng để kiểm tra hiệp sĩ hết biến thành ếch hay chưa
+    bool isFrog = false;          // Biến này để kiểm tra có biến thành ếch hay không
     //  Khởi tạo vòng lặp để duyệt qua từng sự kiện của hiệp sĩ
     for (int i = 0; event[i] != -1; i++)
     {
@@ -850,9 +854,8 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
         // Sự kiện 6
         else if (event[i] == 6)
         {
-            event_6(myHero, i);
+            event_6(myHero, i, isTiny);
             checkevent_6_end = i;
-            // cout << "HP: " << myHero.HP << endl;
         }
         // Sự kiện 7
         else if (event[i] == 7)
@@ -860,6 +863,7 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
             prev_level = myHero.level;
             checkevent_7_end = i;
             event_7(myHero, i);
+            isFrog = (myHero.level == 1) ? (true) : (false);
         }
         // Sự kiện 11
         else if (event[i] == 11)
@@ -924,13 +928,13 @@ void adventureToKoopa(string file_input, int &HP, int &level, int &remedy, int &
             event_18(myHero, file_merlin_pack);
         }
         // Kiểm tra xem hết bị tí hon chưa
-        if (i - checkevent_6_end == 3)
+        if (endTiny(myHero, i, checkevent_6_end, isTiny))
         {
             myHero.HP = (myHero.HP * 5 > myHero.max_HP) ? (myHero.max_HP) : (myHero.HP * 5);
-            checkevent_6_end = 9999;
+            checkevent_6_end = -9999;
         }
         // Kiểm tra xem hết bị biến thành ếch chưa
-        if (i - checkevent_7_end == 3)
+        if ((isFrog) && (i - checkevent_7_end == 3))
         {
             myHero.level = prev_level;
         }
